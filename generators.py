@@ -1,6 +1,6 @@
 from tensorflow.keras.utils import Sequence
 from numpy import floor, asarray
-from utils import vectorize_sequences
+from utils import one_hot_encode
 
 
 class DataGenerator(Sequence):
@@ -17,7 +17,7 @@ class DataGenerator(Sequence):
         extracted_data = self.data[batch_start:batch_end]
         extracted_labels = self.labels[batch_start:batch_end]
 
-        converted_data = vectorize_sequences(extracted_data, self.classes_count)
+        (converted_data, index) = one_hot_encode(extracted_data, self.classes_count)
 
         return converted_data, asarray(extracted_labels).astype('float32')
 

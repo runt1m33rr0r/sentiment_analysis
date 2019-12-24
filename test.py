@@ -1,5 +1,5 @@
-import sys
+from time import sleep
+from utils import get_imdb_data
 
-if len(sys.argv) > 1:
-    text = sys.argv[1]
-    print(text)
+get_imdb_data()
+

@@ -1,16 +1,16 @@
 import sys
-from tensorflow.keras.datasets import imdb
-from tensorflow.keras import models, layers, regularizers
 import numpy as np
 import matplotlib.pyplot as plt
 
 from generators import DataGenerator
-from utils import text_to_data, vectorize_single
+from models import get_simple_nn
+from utils import text_to_data, read_data, one_hot_encode
 
 validation_size = 10_000
 batch_size = 512
 words_count = 10_000
-(train_data, train_labels), (test_data, test_labels) = imdb.load_data(num_words=words_count)
+(train_data, train_labels) = read_data()
+(test_data, test_labels) = read_data(False)
 
 train_generator = DataGenerator(
     train_data[validation_size:],
@@ -23,21 +23,7 @@ validation_generator = DataGenerator(
     classes_count=words_count,
     batch_size=batch_size)
 
-model = models.Sequential()
-model.add(layers.Dense(
-    16,
-    kernel_regularizer=regularizers.l2(0.001),
-    activation='relu',
-    input_shape=(words_count,)))
-model.add(layers.Dropout(0.5))
-model.add(layers.Dense(
-    16,
-    kernel_regularizer=regularizers.l2(0.001),
-    activation='relu'))
-model.add(layers.Dropout(0.5))
-model.add(layers.Dense(1, activation='sigmoid'))
-
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
+model = get_simple_nn(words_count)
 
 history = model.fit_generator(
     generator=train_generator,
@@ -72,10 +58,10 @@ plt.ylabel('Loss')
 plt.legend()
 plt.show()
 
-if len(sys.argv) > 1:
-    review_text = sys.argv[1]
-    review_text_data = text_to_data(review_text, num_words=words_count)
-    vectorized_review = np.array([vectorize_single(review_text_data, dimesion=words_count)])
-
-    print('converted movie review: ', review_text_data)
-    print('the sentiment of the review is: ', model.predict(vectorized_review)[0][0])
+# if len(sys.argv) > 1:
+#     review_text = sys.argv[1]
+#     review_text_data = text_to_data(review_text, num_words=words_count)
+#     vectorized_review = np.array([vectorize_single(review_text_data, dimesion=words_count)])
+#
+#     print('converted movie review: ', review_text_data)
+#     print('the sentiment of the review is: ', model.predict(vectorized_review)[0][0])
