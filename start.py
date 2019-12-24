@@ -1,9 +1,8 @@
+import sys
 from tensorflow.keras.datasets import imdb
-from tensorflow.keras import models
-from tensorflow.keras import layers
+from tensorflow.keras import models, layers, regularizers
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
 
 from generators import DataGenerator
 from utils import text_to_data, vectorize_single
@@ -25,8 +24,17 @@ validation_generator = DataGenerator(
     batch_size=batch_size)
 
 model = models.Sequential()
-model.add(layers.Dense(16, activation='relu', input_shape=(words_count,)))
-model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dense(
+    16,
+    kernel_regularizer=regularizers.l2(0.001),
+    activation='relu',
+    input_shape=(words_count,)))
+model.add(layers.Dropout(0.5))
+model.add(layers.Dense(
+    16,
+    kernel_regularizer=regularizers.l2(0.001),
+    activation='relu'))
+model.add(layers.Dropout(0.5))
 model.add(layers.Dense(1, activation='sigmoid'))
 
 model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
@@ -34,7 +42,7 @@ model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
 history = model.fit_generator(
     generator=train_generator,
     validation_data=validation_generator,
-    epochs=4)
+    epochs=6)
 
 test_generator = DataGenerator(test_data, test_labels, classes_count=words_count, batch_size=batch_size)
 results = model.evaluate_generator(generator=test_generator)
