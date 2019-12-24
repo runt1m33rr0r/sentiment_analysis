@@ -17,4 +17,4 @@ class DataGenerator(Sequence):
         return extracted_data, extracted_labels
 
     def __len__(self):
-        return int(floor((self.slice_end - self.slice_start + 2) / self.batch_size))
+        return int(floor((self.slice_end - self.slice_start + 1) / self.batch_size))

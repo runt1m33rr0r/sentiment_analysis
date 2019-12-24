@@ -136,3 +136,5 @@ dmypy.json
 *.pickle
 
 /nn
+
+data.csv

@@ -39,17 +39,3 @@ def run_simple_nn(words_count, train_generator, validation_generator, test_gener
     model.save(nn_file_name)
 
     return model, history
-
-
-# def run_lstm(words_count):
-#     model = models.Sequential()
-#     model.add(layers.Embedding(words_count, 32))
-#     model.add(layers.LSTM(32))
-#     model.add(layers.Dense(1, activation='sigmoid'))
-#
-#     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
-#
-#     history = model.fit(input_train, y_train,
-#                         epochs=10,
-#                         batch_size=128,
-#                         validation_split=0.2)
