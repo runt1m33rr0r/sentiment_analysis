@@ -1,7 +1,17 @@
 from tensorflow.keras import models, layers, regularizers
 
 
-def get_simple_nn(words_count):
+def run_simple_nn(words_count, train_generator, validation_generator, test_generator):
+    nn_file_name = 'nn'
+    model = None
+    try:
+        model = models.load_model(nn_file_name)
+    except IOError:
+        pass
+
+    if model:
+        return model, None
+
     model = models.Sequential()
     model.add(layers.Dense(
         16,
@@ -18,7 +28,17 @@ def get_simple_nn(words_count):
 
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
 
-    return model
+    history = model.fit_generator(
+        generator=train_generator,
+        validation_data=validation_generator,
+        epochs=6)
+
+    results = model.evaluate_generator(generator=test_generator)
+    print('results: ', results)
+
+    model.save(nn_file_name)
+
+    return model, history
 
 
 # def run_lstm(words_count):

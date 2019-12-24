@@ -128,8 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-/data/test/*
-/data/train/*
+/data
 
 !/data/test/.gitkeep
 !/data/train/.gitkeep
+
+*.pickle
+
+/nn
