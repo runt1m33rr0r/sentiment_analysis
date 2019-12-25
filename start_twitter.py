@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from tensorflow.keras import models, layers, regularizers
 
 from generators import DataGenerator
-from utils import TwitterData
+from data import TwitterData
 
 train_size = 15_000
 validation_size = 10_000

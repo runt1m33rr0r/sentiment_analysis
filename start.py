@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from generators import DataGenerator
 from models import run_simple_nn
-from utils import ImdbData
+from data import ImdbData
 
 train_size = 15_000
 validation_size = 10_000
