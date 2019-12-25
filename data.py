@@ -15,27 +15,25 @@ class BaseData:
         loaded_tokenizer = load_file(tokenizer_file_name)
         loaded_data = load_file(data_file_name)
 
-        self.num_words = num_words
-        self.tokenizer = loaded_tokenizer if loaded_tokenizer else Tokenizer(num_words=num_words)
-        (self.texts, self.labels) = loaded_data if loaded_data else self._read_file_data()
+        self._num_words = num_words
+        self._tokenizer = loaded_tokenizer if loaded_tokenizer else Tokenizer(num_words=num_words)
+        (self._texts, self._labels) = loaded_data if loaded_data else self._read_file_data()
 
         if not loaded_tokenizer:
-            self.tokenizer.fit_on_texts(self._text_generator())
-            save_file(tokenizer_file_name, self.tokenizer)
+            self._tokenizer.fit_on_texts(self._text_generator())
+            save_file(tokenizer_file_name, self._tokenizer)
 
         if not loaded_data:
-            save_file(data_file_name, (self.texts, self.labels))
+            save_file(data_file_name, (self._texts, self._labels))
 
     def _read_file_data(self):
         pass
 
     def _text_generator(self):
-        for text_file in self.texts:
-            with open(text_file, encoding='utf8') as file:
-                yield file.read()
+        pass
 
     def _one_hot_encode(self, data):
-        converted_data = self.tokenizer.texts_to_matrix(data, mode='binary')
+        converted_data = self._tokenizer.texts_to_matrix(data, mode='binary')
 
         return converted_data
 
@@ -52,13 +50,13 @@ class BaseData:
 
     @property
     def size(self):
-        return len(self.texts)
+        return len(self._texts)
 
     def text_to_data(self, text):
         cleaned_text = text.lower().translate(str.maketrans('', '', string.punctuation))
         words = cleaned_text.split(' ')
 
-        return self.tokenizer.texts_to_matrix([words], mode='binary')
+        return self._tokenizer.texts_to_matrix([words], mode='binary')
 
     def read_data(self, start_idx, end_idx):
         if start_idx < 0 or end_idx >= self.size:
@@ -67,17 +65,7 @@ class BaseData:
 
 class ImdbData(BaseData):
     def __init__(self, num_words=10_000):
-        super().__init__('tokenizer.pickle', 'data.pickle', num_words)
-
-    def read_data(self, start_idx, end_idx):
-        super().read_data(start_idx, end_idx)
-
-        opened_texts = []
-        for text_file in self.texts[start_idx:end_idx + 1]:
-            with open(text_file, encoding='utf8') as file:
-                opened_texts.append(file.read())
-
-        return self._process_data(opened_texts, self.labels[start_idx:end_idx + 1])
+        super().__init__('tokenizer_imdb.pickle', 'data_imdb.pickle', num_words)
 
     def _read_file_data(self):
         data_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data')
@@ -96,6 +84,21 @@ class ImdbData(BaseData):
         unpacked_texts, unpacked_labels = zip(*texts)
 
         return list(unpacked_texts), list(unpacked_labels)
+
+    def _text_generator(self):
+        for text_file in self._texts:
+            with open(text_file, encoding='utf8') as file:
+                yield file.read()
+
+    def read_data(self, start_idx, end_idx):
+        super().read_data(start_idx, end_idx)
+
+        opened_texts = []
+        for text_file in self._texts[start_idx:end_idx + 1]:
+            with open(text_file, encoding='utf8') as file:
+                opened_texts.append(file.read())
+
+        return self._process_data(opened_texts, self._labels[start_idx:end_idx + 1])
 
 
 class TwitterData(BaseData):
@@ -122,7 +125,11 @@ class TwitterData(BaseData):
 
         return list(unpacked_texts), list(unpacked_labels)
 
+    def _text_generator(self):
+        for text in self._texts:
+            yield text
+
     def read_data(self, start_idx, end_idx):
         super().read_data(start_idx, end_idx)
 
-        return self._process_data(self.texts[start_idx:end_idx + 1], self.labels[start_idx:end_idx + 1])
+        return self._process_data(self._texts[start_idx:end_idx + 1], self._labels[start_idx:end_idx + 1])

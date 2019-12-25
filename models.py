@@ -2,8 +2,9 @@ from tensorflow.keras import models, layers, regularizers
 
 
 def run_simple_nn(words_count, train_generator, validation_generator, model_file_name, should_load=True):
+    model = None
+
     if should_load:
-        model = None
         try:
             model = models.load_model(model_file_name)
         except IOError:
