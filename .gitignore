@@ -135,6 +135,7 @@ dmypy.json
 
 *.pickle
 
-/nn
+/twitter_nn
+/imdb_nn
 
 data.csv

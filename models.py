@@ -1,7 +1,17 @@
 from tensorflow.keras import models, layers, regularizers
 
 
-def run_simple_nn(words_count, train_generator, validation_generator):
+def run_simple_nn(words_count, train_generator, validation_generator, model_file_name, should_load=True):
+    if should_load:
+        model = None
+        try:
+            model = models.load_model(model_file_name)
+        except IOError:
+            pass
+
+        if model:
+            return model, None
+
     model = models.Sequential()
     model.add(layers.Dense(
         16,
@@ -22,5 +32,7 @@ def run_simple_nn(words_count, train_generator, validation_generator):
         generator=train_generator,
         validation_data=validation_generator,
         epochs=6)
+
+    model.save(model_file_name)
 
     return model, history

@@ -8,11 +8,15 @@ class Experiment:
     def __init__(
             self,
             data_class,
+            model_file_name,
+            should_load_model,
             train_size=15_000,
             validation_size=10_000,
             test_size=25_000,
             batch_size=512,
             words_count=10_000):
+        self._model_file_name = model_file_name
+        self._should_load_model = should_load_model
         self._train_start = 0
         self._train_end = train_size - 1
         self._validation_start = train_size
@@ -45,7 +49,9 @@ class Experiment:
         self._model, history = run_simple_nn(
             self._words_count,
             self._train_generator,
-            self._validation_generator)
+            self._validation_generator,
+            self._model_file_name,
+            should_load=self._should_load_model)
 
         results = self._model.evaluate_generator(generator=self._test_generator)
         print('test results: ', results)

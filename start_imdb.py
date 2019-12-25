@@ -2,7 +2,7 @@ import sys
 from data import ImdbData
 from experiment import Experiment
 
-imdb_experiment = Experiment(ImdbData)
+imdb_experiment = Experiment(ImdbData, 'imdb_nn', should_load_model=True)
 imdb_experiment.run()
 
 if len(sys.argv) > 1:
