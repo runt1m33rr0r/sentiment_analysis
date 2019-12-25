@@ -1,6 +1,7 @@
 import os
 import string
 import pickle
+import re
 
 
 def save_file(file_name, data):
@@ -17,4 +18,6 @@ def load_file(file_name):
 
 
 def clean_text(text):
-    return text.translate(str.maketrans('', '', string.punctuation))
+    result = re.sub(r'(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+://\S+)', ' ', text)
+
+    return result.translate(str.maketrans('', '', string.punctuation))
