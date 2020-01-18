@@ -7,5 +7,4 @@ imdb_experiment.run()
 
 if len(sys.argv) > 1:
     review_text = sys.argv[1]
-
     print('the sentiment of the review is: ', imdb_experiment.predict(review_text))

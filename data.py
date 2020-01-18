@@ -88,7 +88,7 @@ class ImdbData(BaseData):
     def _text_generator(self):
         for text_file in self._texts:
             with open(text_file, encoding='utf8') as file:
-                yield file.read()
+                yield clean_text(file.read())
 
     def read_data(self, start_idx, end_idx):
         super().read_data(start_idx, end_idx)
@@ -96,7 +96,7 @@ class ImdbData(BaseData):
         opened_texts = []
         for text_file in self._texts[start_idx:end_idx + 1]:
             with open(text_file, encoding='utf8') as file:
-                opened_texts.append(file.read())
+                opened_texts.append(clean_text(file.read()))
 
         return self._process_data(opened_texts, self._labels[start_idx:end_idx + 1])
 

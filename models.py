@@ -27,7 +27,7 @@ def run_simple_nn(words_count, train_generator, validation_generator, model_file
     model.add(layers.Dropout(0.5))
     model.add(layers.Dense(1, activation='sigmoid'))
 
-    model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
+    model.compile(optimizer='rmsprop', loss='mse', metrics=['acc'])
 
     history = model.fit_generator(
         generator=train_generator,
