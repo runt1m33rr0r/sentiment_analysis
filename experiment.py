@@ -14,7 +14,8 @@ class Experiment:
             validation_size=10_000,
             test_size=25_000,
             batch_size=512,
-            words_count=10_000):
+            words_count=10_000,
+            epochs=6):
         self._model_file_name = model_file_name
         self._should_load_model = should_load_model
         self._train_start = 0
@@ -26,6 +27,7 @@ class Experiment:
         self._batch_size = batch_size
         self._words_count = words_count
         self._data = data_class(self._words_count)
+        self._epochs = epochs
 
         self._train_generator = DataGenerator(
             data=self._data,
@@ -51,6 +53,7 @@ class Experiment:
             self._train_generator,
             self._validation_generator,
             self._model_file_name,
+            epochs=self._epochs,
             should_load=self._should_load_model)
 
         results = self._model.evaluate_generator(generator=self._test_generator)

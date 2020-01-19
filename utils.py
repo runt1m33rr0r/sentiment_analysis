@@ -20,4 +20,4 @@ def load_file(file_name):
 def clean_text(text):
     result = re.sub(r'(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+://\S+)', ' ', text)
 
-    return result.translate(str.maketrans('', '', string.punctuation))
+    return result.translate(str.maketrans('', '', string.punctuation)).lower()

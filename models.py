@@ -1,7 +1,7 @@
 from tensorflow.keras import models, layers, regularizers
 
 
-def run_simple_nn(words_count, train_generator, validation_generator, model_file_name, should_load=True):
+def run_simple_nn(words_count, train_generator, validation_generator, model_file_name, epochs=6, should_load=True):
     model = None
 
     if should_load:
@@ -32,7 +32,7 @@ def run_simple_nn(words_count, train_generator, validation_generator, model_file
     history = model.fit_generator(
         generator=train_generator,
         validation_data=validation_generator,
-        epochs=6)
+        epochs=epochs)
 
     model.save(model_file_name)
 

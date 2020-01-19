@@ -1,6 +1,5 @@
 import os
 from random import shuffle
-import string
 from tensorflow.keras.preprocessing.text import Tokenizer
 import numpy as np
 
@@ -53,8 +52,7 @@ class BaseData:
         return len(self._texts)
 
     def text_to_data(self, text):
-        cleaned_text = text.lower().translate(str.maketrans('', '', string.punctuation))
-        words = cleaned_text.split(' ')
+        words = clean_text(text).split(' ')
 
         return self._tokenizer.texts_to_matrix([words], mode='binary')
 
