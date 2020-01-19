@@ -47,7 +47,7 @@ model.add(layers.Dense(
 model.add(layers.Dropout(0.5))
 model.add(layers.Dense(1, activation='sigmoid'))
 
-model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
+model.compile(optimizer='rmsprop', loss='mse', metrics=['acc'])
 ```
 
 ## Model accuracy
